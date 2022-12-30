@@ -9,12 +9,13 @@
 
 <br/>
 <div class="form-group">
-    <form method="POST">
+    {% if request.user.is_authenticated %}
         {% csrf_token %}
         {{ form.as_p }}
         <button id="edit-delete-story-btn" class="btn btn-secondary">Edit Story</button>
-    </div>
-
+    {% else %}
+        <h3> Oops! You need to login before editing a post! </h3>
+    {% endif %} 
 </div>
 
 {% endblock %}

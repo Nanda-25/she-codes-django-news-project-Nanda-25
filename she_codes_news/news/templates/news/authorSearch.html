@@ -8,21 +8,25 @@
 {% block content %}
 
     <br><br/>
+    {% if request.user.is_authenticated %}
+        <form action="" method="GET">
+            {% csrf_token %}
+            <p>Select Author:
+                <input name="author" type="text" list="author_list" placeholder="Author" autocomplete="off">
+                <datalist id="author_list">
+                    <select name="Author">
+                        {% for author in author_list %}
+                            <option value="{{ author.username }}"></option>
+                        {% endfor %}
+                    </select>
+                </datalist>
+                <input type="submit">
+            </p>
+        {% else %}
+            <h3> Oops! You need to login before searching for an Author! </h3>
+        {% endif %} 
+        </form>
 
-    <form action="" method="GET">
-        {% csrf_token %}
-        <p>Select Author:
-            <input name="author" type="text" list="author_list" placeholder="Author" autocomplete="off">
-            <datalist id="author_list">
-                <select name="Author">
-                    {% for author in author_list %}
-                        <option value="{{ author.username }}"></option>
-                    {% endfor %}
-                </select>
-            </datalist>
-            <input type="submit">
-        </p>
-    </form>
 
     <br/>
 
