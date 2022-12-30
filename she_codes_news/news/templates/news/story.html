@@ -15,9 +15,10 @@
         {{ story.content|linebreaks }}
     </div>
     <div class="story-buttons">
-        % if request.user == story.author % 
-        <a id="edit-delete-buttons" href="{% url 'news:editStory' story.id %}">Edit Story</a> <br/> 
-        <a id="edit-delete-buttons" href="{% url 'news:deleteStory' story.id %}">Delete</a> <br/> 
+        {% if request.user.is_authenticated %}
+            <a id="edit-delete-buttons" href="{% url 'news:editStory'}">Edit Story</a> <br/> 
+            <a id="edit-delete-buttons" href="{% url 'news:deleteStory'}">Delete</a> <br/> 
+        {% endif %}
 </div>
 
 {% endblock %}
