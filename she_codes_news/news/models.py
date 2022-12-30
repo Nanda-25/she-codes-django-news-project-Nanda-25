@@ -16,3 +16,15 @@ class NewsStory(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse('news:story', kwargs={'pk': self.pk}))
+
+# categories = (
+#         ('FUN', 'Fun'),
+#         ('MUSIC', 'Music'),
+#         ('MOVIES', 'Movies'),
+#         ('EDUCATION', 'Education'),
+#         ('SCIENCE', 'Science'),
+#         ('TECHNOLOGY', 'Technology'),
+#         ('ANIMALS', 'Animals'),
+#         ('FOOD', 'Food'),
+#     )
+#     category = models.CharField(max_length=200, choices = categories, default='news')

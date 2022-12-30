@@ -9,7 +9,10 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['username', 'email']
 
 class CustomUserChangeForm(UserChangeForm):
+    first_name = forms.CharField(max_length=30, required= False, help_text='Optional.')
+    last_name = forms.CharField(max_length=30, required= False, help_text='Optional.')
+    email = forms.EmailField(max_length=30, help_text='Email required.')
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email']
+        fields = ['username', 'email',]

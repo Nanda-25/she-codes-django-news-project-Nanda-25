@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views import generic
 from django.views.generic import ListView
 from .models import CustomUser
@@ -13,6 +13,12 @@ class CreateAccountView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'users/createAccount.html'
 
+    def form_vali(self, form):
+        f=super().form_valid(form)
+        user = self.object
+        login(self.request, user)
+        return f 
+
 class ProfileView(generic.DetailView):
     model = CustomUser
     template_name = 'users/profileView.html'
@@ -23,16 +29,16 @@ class EditAccountView(generic.UpdateView):
     form_class = CustomUserChangeForm
     model = CustomUser
     context_object_name = 'createAccount'
-    template_name = 'users/createAccount.html' #
+    template_name = 'users/createAccount.html'
 
-class AuthorsView(ListView):
-    model = CustomUser
-    template_name = 'users/viewAuthors.html'
+# class AuthorsView(ListView):
+#     model = CustomUser
+#     template_name = 'users/viewAuthors.html'
 
-    def get_queryset(self):
-        return CustomUser.object.all()
+#     def get_queryset(self):
+#         return CustomUser.object.all()
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['authors'] = CustomUser.objects.all()
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['authors'] = CustomUser.objects.all()
+#         return context

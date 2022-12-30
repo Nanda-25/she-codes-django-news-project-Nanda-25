@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{% static 'news/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <br><br/>
+
+    <form action="" method="GET">
+        {% csrf_token %}
+        <p>Select Author:
+            <input name="author" type="text" list="author_list" placeholder="Author" autocomplete="off">
+            <datalist id="author_list">
+                <select name="Author">
+                    {% for author in author_list %}
+                        <option value="{{ author.username }}"></option>
+                    {% endfor %}
+                </select>
+            </datalist>
+            <input type="submit">
+        </p>
+    </form>
+
+    <br/>
+
+    {% if request.GET.author %}
+        <h2>{{ request.GET.author }}'s Stories</h2> 
+        <a href="{% url 'users:profile' request.GET.author %}">View {{ request.GET.author }}'s Profile</a>
+        <br><br/>
+        {% else %}
+        <h2>All Stories</h2>           
+    {% endif %}        
+
+    <ul>
+        {% if request.GET.author %}
+            {% if author_stories %}
+                {% for story in author_stories %}
+                <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.pub_date }}</a> </li>
+                <!--{% include "./storyCard.html" with story=story %}-->
+                {% endfor %}
+            {% else %}
+                <p>No stories are available.</p>           
+            {% endif %}
+        {% else %}
+            {% if all_stories %}
+                {% for story in all_stories %}
+                <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.author.username }} ({{ story.pub_date }})</a> </li>
+                <!--{% include "./storyCard.html" with story=story %}-->
+                {% endfor %}
+            {% else %}
+                <p>No stories are available.</p>           
+            {% endif %}            
+        {% endif %}
+    </ul>
+
+{% endblock %}

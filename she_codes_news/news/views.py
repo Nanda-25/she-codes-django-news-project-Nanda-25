@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView, UpdateView
 from .models import NewsStory
 from .forms import StoryForm
+from users.models import CustomUser
 
 #classe face field - similar to the functions from the tutorial
 class IndexView(generic.ListView):
@@ -43,3 +44,18 @@ class EditStoryView(UpdateView):
     template_name = 'news/editStory.html'
     fields = ['title', 'pub_date', 'image_url', 'category', 'content']
     success_url = reverse_lazy('news:index')
+
+class Authors(generic.ListView):
+    template_name = 'news/authorSearch.html'
+
+    def get_queryset(self):
+        '''Return all news stories.'''
+        return CustomUser.objects.all()
+
+    def get_context_data(self, **kwargs):
+        query = self.request.GET.get("author")
+        context = super().get_context_data(**kwargs)
+        context['author_list'] = CustomUser.objects.all().order_by('username')
+        context['all_stories'] = NewsStory.objects.all().order_by('-pub_date')
+        context['author_stories'] = NewsStory.objects.filter(author__username=query).order_by('-pub_date')
+        return context
