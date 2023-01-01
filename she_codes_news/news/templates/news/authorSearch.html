@@ -29,35 +29,37 @@
 
 
     <br/>
-
-    {% if request.GET.author %}
-        <h2>{{ request.GET.author }}'s Stories</h2> 
-        <a href="{% url 'users:profile' request.GET.author %}">View {{ request.GET.author }}'s Profile</a>
-        <br><br/>
+    {% if request.user.is_authenticated %}  
+        {% if request.GET.author %}
+            <h2>{{ request.GET.author }}'s Stories</h2> 
+            <br><br/>         
         {% else %}
-        <h2>All Stories</h2>           
+        <p> All Stories </p>
+        {% endif %}
     {% endif %}        
 
-    <ul>
-        {% if request.GET.author %}
-            {% if author_stories %}
-                {% for story in author_stories %}
-                <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.pub_date }}</a> </li>
-                <!--{% include "./storyCard.html" with story=story %}-->
-                {% endfor %}
+    {% if request.user.is_authenticated %}    
+        <ul>
+            {% if request.GET.author %}
+                {% if author_stories %}
+                    {% for story in author_stories %}
+                    <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.pub_date }}</a> </li>
+                    <!--{% include "./storyCard.html" with story=story %}-->
+                    {% endfor %}
+                {% else %}
+                    <p>No stories are available.</p>           
+                {% endif %}
             {% else %}
-                <p>No stories are available.</p>           
+                {% if all_stories %}
+                    {% for story in all_stories %}
+                    <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.author.username }} ({{ story.pub_date }})</a> </li>
+                    <!--{% include "./storyCard.html" with story=story %}-->
+                    {% endfor %}
+                {% else %}
+                    <p>No stories are available.</p>
+                {% endif %}            
             {% endif %}
-        {% else %}
-            {% if all_stories %}
-                {% for story in all_stories %}
-                <li><a href="{% url 'news:story' story.id %}">{{ story.title }}, {{ story.author.username }} ({{ story.pub_date }})</a> </li>
-                <!--{% include "./storyCard.html" with story=story %}-->
-                {% endfor %}
-            {% else %}
-                <p>No stories are available.</p>           
-            {% endif %}            
-        {% endif %}
-    </ul>
+        </ul>
+    {% endif %}
 
 {% endblock %}
